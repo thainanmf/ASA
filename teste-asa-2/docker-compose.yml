@@ -42,22 +42,28 @@ services:
     networks:
       - asa-network
 
-  primario:
+  dns:
     build:
-      context: primario/Dockerfile
-    volumes:
-      - primario/named.conf:/etc/named.conf
+      context: ./bind/primario
+      dockerfile: Dockerfile
+    image: primario
+    container_name: primario
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
     networks:
-      - asa-network
-
-  secundario:
+      - teste-asa-1b
+  dnns:
     build:
-      context: secundario/Dockerfile
-    volumes:
-      - secundario/named.conf:/etc/named.conf
+      context: ./bind/secundario
+      dockerfile: Dockerfile
+    image: secundario
+    container_name: secundario
+    ports:
+      - "5353:53/tcp"
+      - "5353:53/udp"
     networks:
-      - asa-network
-
+      - teste-asa-1b    
 # Docker Networks
 networks:
   asa-network:
